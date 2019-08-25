@@ -13,11 +13,11 @@ pace_data = pd.read_csv('C:/Users/Danijel/Desktop/PLINI_PACE_0519-1.csv', delimi
 #DATA PREPROCESSING AND CLEANING
 
 #number of rows and columns
-pace_data.shape
+m, n = pace_data.shape
 #check if columns have names
 pace_data.columns
 #types of column data
-print (pace_data.dtypes)
+pace_data.dtypes
 
 #check for missing values
 pace_data[pace_data["date"].isnull() == True].shape
@@ -31,11 +31,28 @@ pace_data[pace_data["licence_type"].isnull() == True].shape
 pace_data[pace_data.duplicated() == True].shape
 
 #check for unique values for date and user ids
-print (len(pace_data["date"].unique()))
-print (len(pace_data["customer_id"].unique()))
+len(pace_data["date"].unique())
+len(pace_data["customer_id"].unique())
 
 #add origin column before merging data
 pace_data['origin'] = "pace"
 
 #calculate number of full licences
-print (pace_data[pace_data['licence_type'] == "FULL"].shape)
+number_of_full_licences = pace_data[pace_data['licence_type'] == "FULL"].shape
+
+#calculate percentage of full licences
+print ("Percentage of full licences", number_of_full_licences[0]/m * 100, "%")
+#users that pop up twice should be ones who switched from trial to full
+#thats not the case every time - there are users who got trial version more times
+more_than_one_time_users = pace_data[pace_data['customer_id'].duplicated()].shape[0]
+print (len(pace_data[pace_data['customer_id'].duplicated()]['customer_id'].unique()))
+
+#instead calulate number of users that have duplicate entries in columns customer_id and licence_type
+data = pace_data[["customer_id","licence_type"]]
+duplicates_with_same_licence_type = data[data.duplicated() == True].shape[0]
+duplicated_licences = data[data.duplicated() == True]
+print ("duplikati", len(duplicated_licences['customer_id'].unique()))
+
+print ("Number of users that switched from trial to full licence is", more_than_one_time_users-duplicates_with_same_licence_type)
+
+bleja = pace_data[pace_data['customer_id'].duplicated()]
