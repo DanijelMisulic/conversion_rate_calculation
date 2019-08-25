@@ -44,15 +44,13 @@ number_of_full_licences = pace_data[pace_data['licence_type'] == "FULL"].shape
 print ("Percentage of full licences", number_of_full_licences[0]/m * 100, "%")
 #users that pop up twice should be ones who switched from trial to full
 #thats not the case every time - there are users who got trial version more times
-more_than_one_time_users = pace_data[pace_data['customer_id'].duplicated()].shape[0]
-print (len(pace_data[pace_data['customer_id'].duplicated()]['customer_id'].unique()))
+more_than_one_time_users = len(pace_data[pace_data['customer_id'].duplicated()]['customer_id'].unique())
 
 #instead calulate number of users that have duplicate entries in columns customer_id and licence_type
 data = pace_data[["customer_id","licence_type"]]
-duplicates_with_same_licence_type = data[data.duplicated() == True].shape[0]
 duplicated_licences = data[data.duplicated() == True]
-print ("duplikati", len(duplicated_licences['customer_id'].unique()))
+duplicates_with_same_licence_type = len(duplicated_licences['customer_id'].unique())
 
 print ("Number of users that switched from trial to full licence is", more_than_one_time_users-duplicates_with_same_licence_type)
 
-bleja = pace_data[pace_data['customer_id'].duplicated()]
+pace_data[pace_data['customer_id'].duplicated()]
